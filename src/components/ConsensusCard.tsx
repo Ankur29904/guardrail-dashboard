@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { GitMerge, AlertCircle, CheckCircle2, Terminal } from 'lucide-react';
+import { GitMerge, Terminal } from 'lucide-react';
 import type { SimulationStage, Scenario_Data } from '../types';
 
 interface ConsensusCardProps {

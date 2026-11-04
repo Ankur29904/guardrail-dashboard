@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, Badge, MessageSquare, FileText } from 'lucide-react';
+import { Bot, MessageSquare, FileText } from 'lucide-react';
 import type { SimulationStage, Scenario_Data } from '../types';
 
 interface GitHubReviewDeliverableProps {
@@ -95,7 +95,7 @@ export function GitHubReviewDeliverable({ stage, data }: GitHubReviewDeliverable
   );
 }
 
-function CommentBody({ comment, isVulnerable }: { comment: string; isVulnerable: boolean }) {
+function CommentBody({ comment }: { comment: string; isVulnerable?: boolean }) {
   // Parse the comment into sections with simple markdown-like rendering
   const lines = comment.split('\n');
   

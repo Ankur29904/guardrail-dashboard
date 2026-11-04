@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { FileCode, GitPullRequest, Eye } from 'lucide-react';
+import { FileCode, GitPullRequest } from 'lucide-react';
 import type { DiffLine, Scenario_Data, SimulationStage } from '../types';
 
 interface DiffViewerProps {

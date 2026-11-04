@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Zap, GitPullRequest, Radio, ChevronDown } from 'lucide-react';
+import { Shield, Zap, GitPullRequest, Radio } from 'lucide-react';
 import type { Scenario, SimulationStage } from '../types';
 
 interface DashboardHeaderProps {

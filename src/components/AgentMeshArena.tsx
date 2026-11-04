@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Zap, Layers, Code2, Cpu, Activity } from 'lucide-react';
+import { Shield, Zap, Layers, Code2, Cpu } from 'lucide-react';
 import type { AgentStatus, SimulationStage, Scenario_Data } from '../types';
 
 interface AgentMeshArenaProps {
@@ -84,7 +84,7 @@ export function AgentMeshArena({ stage, data }: AgentMeshArenaProps) {
   const isCompleted = stage === 'COMPLETED';
   const showFindings = isCompleted;
 
-  function getAgentStatus(agentId: string): AgentStatus {
+  function getAgentStatus(_agentId: string): AgentStatus {
     if (stage === 'IDLE' || stage === 'INGESTING' || stage === 'SAST_SCANNING') return 'idle';
     if (isDebating) return 'evaluating';
     return 'done';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { DashboardHeader } from './components/DashboardHeader';
 import { MetricsStrip } from './components/MetricsStrip';
 import { DiffViewer } from './components/DiffViewer';
