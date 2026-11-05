@@ -13,13 +13,13 @@
   <strong>An Asynchronous, Two-Tier DevSecOps Pipeline Combining Deterministic Shift-Left SAST/AST Pre-Filtering with a Parallel Multi-Agent LLM Debate Mesh for Automated GitHub Pull Request Auditing and Zero-Tolerance CI/CD Quality Gating.</strong>
 </p>
 
-[**🌐 Live Demo Dashboard**](https://ankur29904.github.io/guardrail-dashboard/) • [**Architecture**](#-system-architecture) • [**Google X-Y-Z Metrics**](#-engineering-impact--google-x-y-z-formula) • [**Multi-Agent Mesh**](#-multi-agent-orchestration-arena) • [**Quickstart**](#-getting-started)
+[** Live Demo Dashboard**](https://ankur29904.github.io/guardrail-dashboard/) • [**Architecture**](#-system-architecture) • [**Google X-Y-Z Metrics**](#-engineering-impact--google-x-y-z-formula) • [**Multi-Agent Mesh**](#-multi-agent-orchestration-arena) • [**Quickstart**](#-getting-started)
 
 </div>
 
 ---
 
-## 📌 Executive Summary
+##  Executive Summary
 
 Modern software engineering organizations face significant friction during code review: senior engineers spend **20% to 30% of their bandwidth** performing manual peer reviews, while static analysis tools (SAST) generate **over 40% false-positive noise**. Conversely, monolithic LLM prompt workflows suffer from **prohibitive token bloat**, high inference latencies (>45s), and catastrophic hallucinations on subtle architectural tradeoffs.
 
@@ -29,7 +29,7 @@ Modern software engineering organizations face significant friction during code 
 
 ---
 
-## 🎯 Engineering Impact — Google "X-Y-Z" Formula
+##  Engineering Impact — Google "X-Y-Z" Formula
 
 Following the Google engineering accomplishment framework (*"Accomplished [X], as measured by [Y], by doing [Z]"*):
 
@@ -43,7 +43,7 @@ Following the Google engineering accomplishment framework (*"Accomplished [X], a
 
 ---
 
-## 🏛️ System Architecture
+##  System Architecture
 
 ### High-Level Dataflow
 
@@ -172,7 +172,7 @@ sequenceDiagram
 
 ---
 
-## 🤖 Multi-Agent Orchestration Arena
+##  Multi-Agent Orchestration Arena
 
 GuardRail.AI replaces generic prompts with an adversarial, specialized agent mesh orchestrated inside a **LangGraph** cyclical state machine:
 
@@ -186,7 +186,7 @@ GuardRail.AI replaces generic prompts with an adversarial, specialized agent mes
 
 ---
 
-## 🔬 Deterministic SAST Pre-Filtering (Shift-Left)
+##  Deterministic SAST Pre-Filtering (Shift-Left)
 
 Rather than sending unvalidated code diffs to LLMs, GuardRail.AI executes a deterministic pre-filter:
 1. **Tree-sitter AST Parser:** Tokenizes Python/polyglot source into concrete syntax trees. Flags `JoinedStr` (f-string interpolation) within database execute call expressions.
@@ -203,7 +203,7 @@ Rather than sending unvalidated code diffs to LLMs, GuardRail.AI executes a dete
 
 ---
 
-## 🚦 Interactive Evaluation Dashboard
+##  Interactive Evaluation Dashboard
 
 The repository includes a modern, solid-color single-page evaluation dashboard developed with **React 19, TypeScript, and Tailwind CSS v4**:
 
@@ -220,7 +220,7 @@ The repository includes a modern, solid-color single-page evaluation dashboard d
 
 ---
 
-## 🛠️ Tech Stack Matrix
+##  Tech Stack Matrix
 
 | Domain | Technologies |
 | :--- | :--- |
@@ -233,7 +233,7 @@ The repository includes a modern, solid-color single-page evaluation dashboard d
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 * **Node.js:** v20+ or v22+
@@ -273,7 +273,7 @@ npm run deploy
 
 ---
 
-## 👥 Academic & Team Credentials
+##  Academic & Team Credentials
 
 * **Institution:** School of Computational & Applied Sciences, **Brainware University**
 * **Department:** Department of Computer Science & Engineering
