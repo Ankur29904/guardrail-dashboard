@@ -1,5 +1,5 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Zap, GitPullRequest, Radio } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Shield, Zap, GitPullRequest, RotateCcw } from 'lucide-react';
 import type { Scenario, SimulationStage } from '../types';
 
 interface DashboardHeaderProps {
@@ -21,99 +21,91 @@ export function DashboardHeader({
   const isCompleted = stage === 'COMPLETED';
 
   return (
-    <header className="sticky top-0 z-50 w-full">
-      {/* Blurred backdrop */}
-      <div className="absolute inset-0 bg-[#070B14]/80 backdrop-blur-2xl border-b border-white/[0.06]" />
+    <header className="sticky top-0 z-50 w-full bg-[#0F172A] border-b border-slate-800 shadow-md">
+      <div className="flex items-center justify-between gap-4 px-6 py-2.5">
 
-      <div className="relative flex items-center justify-between gap-4 px-6 py-3">
         {/* ── Brand ── */}
-        <div className="flex items-center gap-3 min-w-0">
-          <div className="relative flex-shrink-0">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-cyan-500/20 to-indigo-600/20 border border-cyan-500/30 flex items-center justify-center">
-              <Shield className="w-5 h-5 text-cyan-400" />
-            </div>
-            {/* Animated radar dot */}
-            <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500" />
-            </span>
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-blue-600 flex items-center justify-center text-white shadow-sm flex-shrink-0">
+            <Shield className="w-5 h-5 text-white" />
           </div>
-          <div className="min-w-0">
+          <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-bold tracking-wider text-white text-glow-cyan">
-                GUARDRAIL<span className="text-cyan-400">.AI</span>
+              <span className="text-sm font-bold tracking-wider text-white">
+                GUARDRAIL<span className="text-blue-400">.AI</span>
               </span>
-              <span className="badge-pill bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+              <span className="bg-blue-950 text-blue-300 border border-blue-800 text-[10px] font-bold px-1.5 py-0.2 rounded uppercase">
                 v2.1
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 tracking-wider hidden sm:block">
-              Hybrid SAST + Agentic CI/CD Guardrail
+            <p className="text-[11px] text-slate-400 hidden sm:block">
+              Multi-Agent AI Code Reviewer & CI/CD Guardrail
             </p>
           </div>
         </div>
 
-        {/* ── Scenario Switcher ── */}
-        <div className="flex-1 flex justify-center">
-          <div className="glass-panel-sm flex items-center gap-1 p-1 rounded-xl">
-            <ScenarioBtn
-              active={scenario === 'vulnerable'}
-              label="PR #104: Auth & SQL Query"
-              sub="SQL Injection + Exposed Secret"
-              color="rose"
-              onClick={() => onScenarioChange('vulnerable')}
-            />
-            <ScenarioBtn
-              active={scenario === 'clean'}
-              label="PR #105: Refactor Caching Layer"
-              sub="Passing · Optimal Performance"
-              color="emerald"
-              onClick={() => onScenarioChange('clean')}
-            />
-          </div>
+        {/* ── Scenario Switcher (Solid & User-Friendly) ── */}
+        <div className="flex items-center bg-[#0B1120] p-1 rounded-lg border border-slate-800 gap-1.5">
+          <ScenarioButton
+            isActive={scenario === 'vulnerable'}
+            prNumber="#104"
+            title="Vulnerable Auth & SQL PR"
+            subtitle="CWE-89 SQLi + Secret Leak"
+            theme="rose"
+            onClick={() => onScenarioChange('vulnerable')}
+          />
+          <ScenarioButton
+            isActive={scenario === 'clean'}
+            prNumber="#105"
+            title="Clean Cache & AST PR"
+            subtitle="Optimal O(1) · Passing Guardrail"
+            theme="emerald"
+            onClick={() => onScenarioChange('clean')}
+          />
         </div>
 
-        {/* ── Actions ── */}
-        <div className="flex items-center gap-3 flex-shrink-0">
-          {/* Gateway status */}
-          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[10px] text-emerald-400 font-mono tracking-wide">
-              :8000 · HMAC-SHA256
+        {/* ── Actions & Gateway Status ── */}
+        <div className="flex items-center gap-3">
+          {/* Gateway Badge */}
+          <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#0B1120] border border-slate-800 text-xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+            <span className="text-slate-300 font-mono text-[11px]">
+              Port 8000 · HMAC-SHA256
             </span>
           </div>
 
+          {/* Trigger or Reset Button */}
           <AnimatePresence mode="wait">
             {isCompleted ? (
               <motion.button
                 key="reset"
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 onClick={onReset}
-                className="btn-secondary text-xs"
+                className="btn-secondary flex items-center gap-1.5"
               >
-                <Radio className="w-3.5 h-3.5" />
-                Reset
+                <RotateCcw className="w-3.5 h-3.5 text-slate-300" />
+                Reset Demo
               </motion.button>
             ) : (
               <motion.button
                 key="simulate"
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                exit={{ opacity: 0, scale: 0.95 }}
                 onClick={onSimulate}
                 disabled={isRunning}
-                className="btn-primary text-xs disabled:opacity-50 disabled:cursor-not-allowed"
+                className="btn-primary flex items-center gap-2"
               >
                 {isRunning ? (
                   <>
-                    <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                    Processing...
+                    <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                    Auditing Payload...
                   </>
                 ) : (
                   <>
-                    <Zap className="w-3.5 h-3.5" />
+                    <Zap className="w-4 h-4 fill-current" />
                     Simulate PR Webhook
                   </>
                 )}
@@ -121,51 +113,52 @@ export function DashboardHeader({
             )}
           </AnimatePresence>
         </div>
+
       </div>
     </header>
   );
 }
 
-function ScenarioBtn({
-  active,
-  label,
-  sub,
-  color,
+function ScenarioButton({
+  isActive,
+  prNumber,
+  title,
+  subtitle,
+  theme,
   onClick,
 }: {
-  active: boolean;
-  label: string;
-  sub: string;
-  color: 'rose' | 'emerald';
+  isActive: boolean;
+  prNumber: string;
+  title: string;
+  subtitle: string;
+  theme: 'rose' | 'emerald';
   onClick: () => void;
 }) {
-  const colorMap = {
-    rose: {
-      active: 'bg-rose-500/15 border-rose-500/40 text-rose-300',
-      dot: 'bg-rose-400',
-    },
-    emerald: {
-      active: 'bg-emerald-500/15 border-emerald-500/40 text-emerald-300',
-      dot: 'bg-emerald-400',
-    },
-  };
+  const activeStyles = {
+    rose: 'bg-rose-900/90 border-rose-500 text-white shadow-sm',
+    emerald: 'bg-emerald-900/90 border-emerald-500 text-white shadow-sm',
+  }[theme];
+
+  const inactiveStyles =
+    'bg-[#0F172A] border-slate-800 text-slate-400 hover:bg-slate-800 hover:text-slate-200';
 
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-2 px-3 py-2 rounded-lg border transition-all duration-200 text-left
-        ${active
-          ? `${colorMap[color].active} shadow-sm`
-          : 'border-transparent text-slate-500 hover:text-slate-300 hover:bg-white/[0.03]'
-        }`}
+      className={`flex items-center gap-2.5 px-3 py-1.5 rounded-md border text-left transition-all ${
+        isActive ? activeStyles : inactiveStyles
+      }`}
     >
-      <GitPullRequest className={`w-3.5 h-3.5 flex-shrink-0 ${active ? '' : 'opacity-50'}`} />
+      <GitPullRequest className={`w-3.5 h-3.5 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-500'}`} />
       <div className="min-w-0">
-        <div className="text-[11px] font-semibold truncate max-w-[160px]">{label}</div>
-        <div className="text-[9px] opacity-60 tracking-wide truncate max-w-[160px]">{sub}</div>
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs font-bold">{prNumber}: {title}</span>
+          {isActive && (
+            <span className="w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
+          )}
+        </div>
+        <div className="text-[10px] opacity-75 font-mono truncate">{subtitle}</div>
       </div>
-      {active && <span className={`w-1.5 h-1.5 rounded-full ${colorMap[color].dot} flex-shrink-0 animate-pulse`} />}
     </button>
   );
 }
-

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ChevronRight, AlertTriangle, TreePine, Scan } from 'lucide-react';
+import { ChevronDown, ChevronRight, AlertOctagon, TreePine, ShieldAlert, CheckCircle2 } from 'lucide-react';
 import type { SastFinding, Scenario_Data, SimulationStage } from '../types';
 
 interface SastPanelProps {
@@ -10,127 +10,106 @@ interface SastPanelProps {
 
 export function SastPanel({ data, stage }: SastPanelProps) {
   const [astExpanded, setAstExpanded] = useState(false);
-  const isScanning = stage === 'SAST_SCANNING' || stage === 'AGENT_DEBATING' || stage === 'CONSENSUS' || stage === 'COMPLETED';
+  const isScanning = stage === 'SAST_SCANNING';
   const showFindings = stage === 'AGENT_DEBATING' || stage === 'CONSENSUS' || stage === 'COMPLETED';
   const hasFindings = data.sastFindings.length > 0;
 
   return (
     <div className="space-y-3">
-      {/* SAST Status Header */}
-      <div className={`glass-panel p-4 relative overflow-hidden transition-all duration-700 ${
-        isScanning ? 'border-amber-500/30 glow-amber' : 'border-white/[0.07]'
-      }`}>
-        {isScanning && (
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute -inset-1 opacity-5 bg-gradient-to-br from-amber-500 to-yellow-600 rounded-xl" />
-          </div>
-        )}
-        <div className="relative">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded bg-amber-500/10 flex items-center justify-center">
-                <Scan className="w-3.5 h-3.5 text-amber-400" />
-              </div>
-              <span className="text-xs font-semibold text-white">Shift-Left SAST Pre-Filter</span>
-            </div>
-            <AnimatePresence mode="wait">
-              {isScanning ? (
-                <motion.div
-                  key="scanning"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.8 }}
-                  className={`badge-pill ${
-                    hasFindings
-                      ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
-                      : 'bg-emerald-500/15 text-emerald-400 border-emerald-500/30'
-                  } border`}
-                >
-                  {stage === 'SAST_SCANNING' ? (
-                    <><span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" /> SCANNING</>
-                  ) : hasFindings ? (
-                    '⚠ FINDINGS DETECTED'
-                  ) : (
-                    '✓ CLEAN PASS'
-                  )}
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="idle"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="badge-pill bg-slate-800 text-slate-500 border border-slate-700"
-                >
-                  AWAITING
-                </motion.div>
-              )}
-            </AnimatePresence>
+      {/* SAST Pre-Filter Status Card */}
+      <div className="bg-[#0F172A] border border-slate-800 rounded-lg p-3.5 shadow-sm">
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4 text-amber-400" />
+            <span className="text-xs font-bold text-white uppercase tracking-wide">
+              Deterministic Rule Engine
+            </span>
           </div>
 
-          {/* Tool badges */}
-          <div className="flex flex-wrap gap-2">
-            {['Semgrep', 'Bandit', 'Tree-sitter AST'].map((tool, i) => (
-              <ToolBadge
-                key={tool}
-                name={tool}
-                active={isScanning}
-                delay={i * 0.15}
-              />
-            ))}
+          {/* Dynamic Status Badge */}
+          <div>
+            {isScanning ? (
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-amber-700 text-[10px] font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+                AST SCANNING
+              </span>
+            ) : showFindings ? (
+              hasFindings ? (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-rose-950 text-rose-300 border border-rose-700 text-[10px] font-bold">
+                  <span>⚠</span> {data.sastFindings.length} FINDINGS DETECTED
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950 text-emerald-300 border border-emerald-700 text-[10px] font-bold">
+                  <CheckCircle2 className="w-3 h-3 text-emerald-400" /> 0 FINDINGS (CLEAN)
+                </span>
+              )
+            ) : (
+              <span className="px-2 py-0.5 rounded bg-slate-800 text-slate-400 border border-slate-700 text-[10px] font-bold">
+                STANDBY
+              </span>
+            )}
           </div>
+        </div>
+
+        {/* Static Analysis Tools Matrix */}
+        <div className="flex flex-wrap gap-2 pt-1">
+          {['Semgrep Rules', 'Bandit Security', 'Tree-sitter AST', 'Ruff Linter'].map((tool) => (
+            <span
+              key={tool}
+              className="px-2 py-0.5 rounded bg-[#0B1120] border border-slate-800 text-slate-300 font-mono text-[10px] font-semibold flex items-center gap-1.5"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              {tool}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Findings */}
+      {/* Findings List */}
       <AnimatePresence>
         {showFindings && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.4 }}
             className="space-y-2"
           >
             {hasFindings ? (
-              data.sastFindings.map((f, i) => (
-                <FindingCard key={i} finding={f} index={i} />
+              data.sastFindings.map((finding, idx) => (
+                <FindingItem key={idx} finding={finding} index={idx} />
               ))
             ) : (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="glass-panel-sm p-3 border-emerald-500/20"
-              >
-                <div className="flex items-center gap-2">
-                  <span className="text-emerald-400">✓</span>
-                  <span className="text-xs text-emerald-300 font-semibold">No security findings detected</span>
+              <div className="bg-[#062017] border border-emerald-800 rounded-lg p-3 text-xs text-emerald-200">
+                <div className="flex items-center gap-2 font-bold text-emerald-300">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                  Deterministic Pre-Filter Passed (0 Alerts)
                 </div>
-                <p className="text-[10px] text-slate-500 mt-1 ml-5">
-                  Semgrep · Bandit · Tree-sitter all returned clean — 0 findings
+                <p className="text-[11px] text-emerald-400/80 mt-1 ml-6">
+                  Bandit AST rules and Semgrep patterns found zero OWASP Top 10 vulnerabilities in this diff.
                 </p>
-              </motion.div>
+              </div>
             )}
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* AST Node Tree */}
-      <div className="glass-panel-sm border border-white/[0.05]">
+      {/* Tree-sitter AST Nodes Hierarchy (Collapsible) */}
+      <div className="bg-[#0F172A] border border-slate-800 rounded-lg overflow-hidden shadow-sm">
         <button
-          onClick={() => setAstExpanded(v => !v)}
-          className="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-white/[0.02] transition-colors rounded-xl"
+          onClick={() => setAstExpanded(!astExpanded)}
+          className="w-full flex items-center justify-between px-3.5 py-2.5 bg-[#111827] hover:bg-slate-800/80 transition-colors text-left"
         >
           <div className="flex items-center gap-2">
-            <TreePine className="w-3.5 h-3.5 text-indigo-400" />
-            <span className="text-xs font-semibold text-slate-300">Tree-sitter AST Analysis</span>
-            <span className="badge-pill bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-              {data.astNodes.length} nodes
+            <TreePine className="w-4 h-4 text-purple-400" />
+            <span className="text-xs font-bold text-slate-200">Tree-sitter AST Hierarchy</span>
+            <span className="bg-purple-950 text-purple-300 border border-purple-800 text-[10px] font-bold px-1.5 py-0.2 rounded font-mono">
+              {data.astNodes.length} Nodes
             </span>
           </div>
           {astExpanded ? (
-            <ChevronDown className="w-3.5 h-3.5 text-slate-500" />
+            <ChevronDown className="w-4 h-4 text-slate-400" />
           ) : (
-            <ChevronRight className="w-3.5 h-3.5 text-slate-500" />
+            <ChevronRight className="w-4 h-4 text-slate-400" />
           )}
         </button>
 
@@ -140,21 +119,22 @@ export function SastPanel({ data, stage }: SastPanelProps) {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="border-t border-white/[0.04] px-4 py-3"
+              className="p-3 bg-[#070B14] border-t border-slate-800 font-mono text-[11px] space-y-1"
             >
-              <div className="font-mono text-[10px] space-y-0.5">
-                {data.astNodes.map((node, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, x: -4 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className={`${node.includes('⚠') ? 'text-amber-300' : node.includes('✓') ? 'text-emerald-300' : 'text-slate-400'}`}
-                  >
-                    {node}
-                  </motion.div>
-                ))}
-              </div>
+              {data.astNodes.map((node, idx) => (
+                <div
+                  key={idx}
+                  className={`py-0.5 ${
+                    node.includes('⚠')
+                      ? 'text-amber-300 font-bold'
+                      : node.includes('✓')
+                      ? 'text-emerald-300'
+                      : 'text-slate-400'
+                  }`}
+                >
+                  {node}
+                </div>
+              ))}
             </motion.div>
           )}
         </AnimatePresence>
@@ -163,65 +143,53 @@ export function SastPanel({ data, stage }: SastPanelProps) {
   );
 }
 
-function ToolBadge({ name, active, delay }: { name: string; active: boolean; delay: number }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0.3 }}
-      animate={{ opacity: active ? 1 : 0.3 }}
-      transition={{ delay, duration: 0.3 }}
-      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono border transition-all duration-500 ${
-        active
-          ? 'bg-amber-500/10 border-amber-500/30 text-amber-300'
-          : 'bg-slate-800/60 border-slate-700/40 text-slate-500'
-      }`}
-    >
-      {active && <span className="w-1 h-1 rounded-full bg-amber-400 animate-pulse" />}
-      {name}
-    </motion.div>
-  );
-}
-
-function FindingCard({ finding, index }: { finding: SastFinding; index: number }) {
-  const isCritical = finding.severity === 'CRITICAL';
+function FindingItem({ finding }: { finding: SastFinding; index: number }) {
+  const isCrit = finding.severity === 'CRITICAL';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -8, scale: 0.98 }}
-      animate={{ opacity: 1, x: 0, scale: 1 }}
-      transition={{ delay: index * 0.12, duration: 0.3 }}
-      className={`glass-panel-sm p-3 border ${
-        isCritical ? 'border-rose-500/30 bg-rose-500/5' : 'border-amber-500/20 bg-amber-500/5'
+    <div
+      className={`rounded-lg p-3 border ${
+        isCrit
+          ? 'bg-[#181119] border-rose-800/80'
+          : 'bg-[#1A1610] border-amber-800/80'
       }`}
     >
-      <div className="flex items-start gap-2">
-        <AlertTriangle className={`w-3.5 h-3.5 mt-0.5 flex-shrink-0 ${isCritical ? 'text-rose-400' : 'text-amber-400'}`} />
+      <div className="flex items-start gap-2.5">
+        <AlertOctagon
+          className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
+            isCrit ? 'text-red-400' : 'text-amber-400'
+          }`}
+        />
         <div className="min-w-0 flex-1">
-          <div className="flex items-center flex-wrap gap-1.5 mb-1">
-            <span className={`badge-pill border ${isCritical
-              ? 'bg-rose-500/15 text-rose-400 border-rose-500/30'
-              : 'bg-amber-500/15 text-amber-400 border-amber-500/30'}`}>
-              [{finding.severity}]
+          <div className="flex items-center gap-2 flex-wrap mb-1">
+            <span
+              className={`text-[9px] font-bold px-1.5 py-0.2 rounded text-white ${
+                isCrit ? 'bg-red-600' : 'bg-amber-600'
+              }`}
+            >
+              {finding.severity}
             </span>
             {finding.cwe && (
-              <span className="badge-pill bg-slate-800 text-slate-400 border border-slate-700">
+              <span className="text-[10px] font-mono font-bold text-slate-300 bg-slate-800 px-1.5 py-0.2 rounded border border-slate-700">
                 {finding.cwe}
               </span>
             )}
-            <span className="badge-pill bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
-              {finding.tool}
+            <span className="text-[10px] font-mono text-slate-400">
+              Tool: <strong className="text-slate-300">{finding.tool}</strong>
             </span>
           </div>
-          <p className={`text-[11px] font-semibold ${isCritical ? 'text-rose-200' : 'text-amber-200'}`}>
+
+          <p className="text-xs font-semibold text-slate-100 leading-snug">
             {finding.message}
           </p>
+
           {finding.line && (
-            <p className="text-[10px] text-slate-500 mt-1 font-mono">
-              Line {finding.line} · {finding.rule}
+            <p className="text-[10px] text-slate-400 mt-1 font-mono">
+              Location: Line {finding.line} • Rule: <code className="text-amber-300">{finding.rule}</code>
             </p>
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
-
