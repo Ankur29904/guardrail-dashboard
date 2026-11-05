@@ -13,7 +13,7 @@
   <strong>An Asynchronous, Two-Tier DevSecOps Pipeline Combining Deterministic Shift-Left SAST/AST Pre-Filtering with a Parallel Multi-Agent LLM Debate Mesh for Automated GitHub Pull Request Auditing and Zero-Tolerance CI/CD Quality Gating.</strong>
 </p>
 
-[** Live Demo Dashboard**](https://ankur29904.github.io/guardrail-dashboard/) • [**Architecture**](#-system-architecture) • [**Google X-Y-Z Metrics**](#-engineering-impact--google-x-y-z-formula) • [**Multi-Agent Mesh**](#-multi-agent-orchestration-arena) • [**Quickstart**](#-getting-started)
+[** Live Demo Dashboard**](https://guardrail-dashboard-one.vercel.app/) • [**Architecture**](#-system-architecture) • [**Google X-Y-Z Metrics**](#-engineering-impact--google-x-y-z-formula) • [**Multi-Agent Mesh**](#-multi-agent-orchestration-arena) • [**Quickstart**](#-getting-started)
 
 </div>
 
